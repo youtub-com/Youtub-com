@@ -4,7 +4,7 @@ import google.generativeai as genai
 
 # --- CONFIGURATION ---
 # अपनी फ्री API Key यहाँ डालें (Google AI Studio से मिलेगी)
-API_KEY = "YOUR_API_KEY_HERE"
+API_KEY = "AIzaSyAunX4Q9HR-4VCh6CemgDdm_FfAGPievPU"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-pro')
 
