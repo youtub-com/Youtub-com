@@ -5,97 +5,93 @@ import google.generativeai as genai
 
 app = Flask(__name__)
 
-# API KEY
+# AI Key (Tumhari set hai)
 API_KEY = "AIzaSyAunX4Q9HR-4VCh6CemgDdm_FfAGPievPU"
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-pro')
 
 HTML_CODE = """
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ULTRA TOOLS | AI & MEDIA</title>
+    <title>Youtub | Premium Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root { --primary: #00f2fe; --secondary: #4facfe; }
-        body { background: #020617; color: white; font-family: 'Inter', sans-serif; }
-        .neon-border { border: 1px solid rgba(0, 242, 254, 0.3); box-shadow: 0 0 15px rgba(0, 242, 254, 0.1); }
-        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-radius: 28px; }
-        .gradient-btn { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); color: #000; font-weight: 800; transition: 0.4s; }
-        .gradient-btn:hover { box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); transform: translateY(-2px); }
-        .tab-active { border-bottom: 3px solid var(--primary); color: var(--primary); }
-        input, textarea { background: rgba(0,0,0,0.4) !important; border: 1px solid #1e293b !important; color: white !important; }
-        input:focus { border-color: var(--primary) !important; box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+        body { background-color: #080808; color: #ffffff; font-family: "Inter", sans-serif; }
+        .youtub-red { color: #FF0000; }
+        .youtub-card { background: #161616; border: 1px solid #222; border-radius: 20px; transition: 0.3s; }
+        .youtub-input { background: #000 !important; border: 1px solid #333 !important; color: white !important; border-radius: 12px !important; transition: 0.3s; }
+        .youtub-input:focus { border-color: #FF0000 !important; box-shadow: 0 0 10px rgba(255, 0, 0, 0.2); }
+        .btn-main { background: #FF0000; color: white; border-radius: 12px; font-weight: 800; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-main:active { transform: scale(0.95); opacity: 0.8; }
+        .btn-ai { background: #ffffff; color: #000; border-radius: 12px; font-weight: 800; transition: 0.3s; }
     </style>
 </head>
-<body class="min-h-screen pb-10">
+<body class="p-6">
 
-    <nav class="p-6 flex justify-between items-center glass m-4 neon-border sticky top-4 z-50">
-        <span class="text-xl font-black tracking-tighter gradient-text" style="background: linear-gradient(to right, #00f2fe, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">ULTRA.UNQ</span>
-        <div class="flex gap-4">
-            <i class="fas fa-shield-alt text-blue-400"></i>
-            <i class="fas fa-bolt text-yellow-400"></i>
+    <header class="flex flex-col items-center justify-center py-10">
+        <div class="flex items-center gap-2 mb-2">
+            <i class="fab fa-youtube text-5xl youtub-red"></i>
+            <h1 class="text-4xl font-black tracking-tighter italic">Youtub</h1>
         </div>
-    </nav>
+        <p class="text-gray-500 text-xs tracking-[0.3em] uppercase">The Ultimate Stealth Tool</p>
+    </header>
 
-    <div class="max-w-md mx-auto px-4 mt-8 space-y-8">
+    <div class="max-w-md mx-auto space-y-8">
         
-        <div class="glass p-8 neon-border">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-3 bg-blue-500/10 rounded-2xl"><i class="fas fa-cloud-download-alt text-blue-400 text-xl"></i></div>
-                <h2 class="text-xl font-extrabold tracking-tight">Media Saver</h2>
-            </div>
-            <p class="text-gray-400 text-sm mb-4">Paste any link from Instagram or YouTube</p>
-            <input type="text" id="v_url" placeholder="https://..." class="w-full p-4 rounded-2xl mb-4 text-sm focus:outline-none">
-            <button onclick="handleDL()" id="dl_btn" class="w-full py-4 rounded-2xl gradient-btn uppercase tracking-widest text-xs">Fetch Video</button>
-            <div id="dl_res" class="mt-6 hidden p-4 rounded-2xl bg-blue-900/20 border border-blue-500/30 text-center animate-pulse"></div>
+        <div class="youtub-card p-8">
+            <h2 class="text-sm font-bold mb-6 text-gray-400 uppercase tracking-widest"><i class="fas fa-bolt mr-2 youtub-red"></i> Media Downloader</h2>
+            <input type="text" id="v_url" placeholder="Paste link here..." class="youtub-input w-full p-4 mb-4 outline-none">
+            <button onclick="handleDL()" id="dl_btn" class="w-full py-4 btn-main shadow-lg shadow-red-600/20">Get Media Link</button>
+            <div id="dl_res" class="mt-4 hidden p-4 bg-red-600/10 border border-red-600/20 rounded-xl text-center text-sm font-bold"></div>
         </div>
 
-        <div class="glass p-8 neon-border">
-            <div class="flex items-center gap-3 mb-6">
-                <div class="p-3 bg-purple-500/10 rounded-2xl"><i class="fas fa-brain text-purple-400 text-xl"></i></div>
-                <h2 class="text-xl font-extrabold tracking-tight">AI Mastermind</h2>
-            </div>
-            <textarea id="ai_q" rows="4" placeholder="Ask me anything..." class="w-full p-4 rounded-2xl mb-4 text-sm focus:outline-none resize-none"></textarea>
-            <button onclick="handleAI()" id="ai_btn" class="w-full py-4 rounded-2xl gradient-btn uppercase tracking-widest text-xs" style="background: linear-gradient(135deg, #a78bfa, #8b5cf6);">Consult AI</button>
-            <div id="ai_res" class="mt-6 hidden p-5 rounded-2xl bg-white/5 border border-white/10 text-sm text-gray-300 leading-relaxed overflow-hidden"></div>
+        <div class="youtub-card p-8">
+            <h2 class="text-sm font-bold mb-6 text-gray-400 uppercase tracking-widest"><i class="fas fa-robot mr-2 text-white"></i> AI Brain</h2>
+            <textarea id="ai_q" rows="4" placeholder="Ask Youtub AI anything..." class="youtub-input w-full p-4 mb-4 outline-none resize-none"></textarea>
+            <button onclick="handleAI()" id="ai_btn" class="w-full py-4 btn-ai shadow-lg shadow-white/10">Ask AI Assistant</button>
+            <div id="ai_res" class="mt-4 hidden p-4 bg-gray-900 border border-gray-800 rounded-xl text-sm text-gray-400 leading-relaxed"></div>
         </div>
 
     </div>
+
+    <footer class="mt-20 text-center text-gray-700 text-[10px] tracking-widest uppercase">
+        <p>© 2026 YOUTUB STUDIO • SIKAR RAJASTHAN</p>
+    </footer>
 
     <script>
         async function handleDL() {
             const u = document.getElementById('v_url').value;
             const res = document.getElementById('dl_res');
             if(!u) return;
-            res.innerHTML = "⚡ PROCESSING..."; res.classList.remove('hidden');
+            res.innerHTML = "⚡ ANALYZING LINK..."; res.classList.remove('hidden');
             try {
                 const r = await fetch('/dl', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({url:u})});
                 const d = await r.json();
-                res.classList.remove('animate-pulse');
-                res.innerHTML = d.ok ? `<a href="${d.link}" target="_blank" class="text-cyan-400 font-black">🔥 DOWNLOAD NOW</a>` : "❌ LINK EXPIRED/INVALID";
-            } catch(e) { res.innerHTML = "⚠️ SERVER BUSY"; }
+                res.innerHTML = d.ok ? `<a href="${d.link}" target="_blank" class="youtub-red underline font-black">🔥 CLICK TO DOWNLOAD</a>` : "❌ LINK ERROR OR PRIVATE";
+            } catch(e) { res.innerHTML = "⚠️ SYSTEM OVERLOAD"; }
         }
 
         async function handleAI() {
             const q = document.getElementById('ai_q').value;
             const res = document.getElementById('ai_res');
             if(!q) return;
-            res.innerHTML = "🧬 THINKING..."; res.classList.remove('hidden');
+            res.innerHTML = "🧬 GENERATING ANSWER..."; res.classList.remove('hidden');
             try {
                 const r = await fetch('/ai', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({q:q})});
                 const d = await r.json();
-                res.innerHTML = d.ok ? d.ans : "⚠️ AI ERROR";
-            } catch(e) { res.innerHTML = "⚠️ OFFLINE"; }
+                res.innerHTML = d.ok ? d.ans : "⚠️ AI IS SLEEPING";
+            } catch(e) { res.innerHTML = "⚠️ NO INTERNET"; }
         }
     </script>
 </body>
 </html>
 """
 
+# --- ROUTES ---
 @app.route('/')
 def home(): return render_template_string(HTML_CODE)
 
@@ -103,7 +99,8 @@ def home(): return render_template_string(HTML_CODE)
 def handle_dl():
     url = request.json.get('url')
     try:
-        with yt_dlp.YoutubeDL({'format': 'best', 'quiet': True}) as ydl:
+        ydl_opts = {'format': 'best', 'quiet': True}
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=False)
             return jsonify({'ok': True, 'link': info.get('url')})
     except: return jsonify({'ok': False})
