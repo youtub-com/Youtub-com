@@ -8,10 +8,11 @@ app = Flask(__name__)
 HTML_CODE = """
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><link rel="icon" type="image/x-icon" href="https://www.youtube.com/s/desktop/28e6783d/img/favicon.ico">
+<link rel="apple-touch-icon" href="https://www.youtube.com/s/desktop/28e6783d/img/favicon_144x144.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Youtub | Fast Downloader</title>
+    <title>Youtub downloader</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
